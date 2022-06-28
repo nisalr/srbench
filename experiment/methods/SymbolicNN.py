@@ -1,4 +1,4 @@
-from src.symNN.sym_nn import SymNN
+from .src.symNN.sym_nn import SymNN
 
 hyper_params = {'reg_change':0.3,
                 'start_ln_block':1,
