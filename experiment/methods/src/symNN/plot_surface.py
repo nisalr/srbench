@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.models import load_model
-from de_learn_network import log_activation, L1L2_m
+from .de_learn_network import log_activation, L1L2_m
 
 model = load_model('../models/model_div_eq.h5', custom_objects={'log_activation':log_activation,
                                                                 'L1L2_m':L1L2_m})

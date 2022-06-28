@@ -1,13 +1,13 @@
-from data_gen  import linear_2D_eq, data_gen_eq, div_eq, div_add, lorenz_eq, data_gen_de, mult_eq, pow_eq, \
+from .data_gen  import linear_2D_eq, data_gen_eq, div_eq, div_add, lorenz_eq, data_gen_de, mult_eq, pow_eq, \
     cube_add_eq, linear_3D_eq, get_symbolic_fn
-from de_learn_network import eql_model, log_activation, eql_model_signed, eql_model_v2, set_model_l1_l2, L1L2_m, \
+from .de_learn_network import eql_model, log_activation, eql_model_signed, eql_model_v2, set_model_l1_l2, L1L2_m, \
     WeightMaskCallback
 import numpy as np
 import mlflow
 import time
 
 from matplotlib import pyplot as plt
-from train_model import train_model_growth, train_model_reg_stage
+from .train_model import train_model_growth, train_model_reg_stage
 
 from sklearn.metrics import mean_squared_error
 from tensorflow.keras.utils import get_custom_objects

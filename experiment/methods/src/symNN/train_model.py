@@ -1,4 +1,4 @@
-from de_learn_network import log_activation,\
+from .de_learn_network import log_activation,\
     eql_model_v2, add_ln_block, set_model_l1_l2, L1L2_m
 import tensorflow as tf
 from tensorflow.keras import optimizers
