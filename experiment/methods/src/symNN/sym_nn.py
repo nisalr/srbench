@@ -24,6 +24,7 @@ class SymNN(BaseEstimator, RegressorMixin):
         X, y = check_X_y(X, y)
         X = np.array(X).transpose()
         x_dim = X.shape[0]
+        x_cols = X.columns.to_list()
         model, train_history, blk_count = train_model_growth(
             X, y, self.start_ln_block, self.num_epochs, self.growth_steps, freeze=self.freeze,
             l1_reg=self.l1_reg, l2_reg=self.l2_reg)
@@ -31,7 +32,7 @@ class SymNN(BaseEstimator, RegressorMixin):
         self.train_history = train_history
         self.blk_count = blk_count
 
-        recovered_eq = get_sympy_expr_v2(model, x_dim, blk_count, round_digits=2)
+        recovered_eq = get_sympy_expr_v2(model, x_dim, blk_count, round_digits=2, x_cols=x_cols)
         self.recovered_eq = recovered_eq
         return self
 

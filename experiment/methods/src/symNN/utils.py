@@ -26,11 +26,16 @@ def round_sympy_expr(sym_expr, round_digits=2, norm_thresh=0.01):
             sym_expr = sym_expr.subs(a, round(a, 2))
     return sym_expr
 
+
 def get_sympy_expr_v2(model, x_dim, ln_layer_count=2, round_digits=3,
-                      norm_thresh=0.01):
-    sym = []
-    for i in range(x_dim):
-        sym.append(symbols('x'+str(i+1)))
+                      norm_thresh=0.01, x_cols=None):
+    if x_cols:
+        sym = x_cols
+    else:
+        sym = []
+        for i in range(x_dim):
+            sym.append(symbols('x'+str(i+1)))
+
     ln_dense_weights = [model.get_layer('ln_dense_{}'.format(i)).get_weights() for i in range(ln_layer_count)]
     output_dense_weights = model.get_layer('output_dense').get_weights()
     print(ln_dense_weights)
