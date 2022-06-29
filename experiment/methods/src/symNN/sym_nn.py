@@ -1,5 +1,5 @@
 from .train_model import train_model_growth, preprocess_data
-from utils import get_sympy_expr_v2
+from .utils import get_sympy_expr_v2
 from .de_learn_network import log_activation
 from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
