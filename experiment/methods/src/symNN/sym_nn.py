@@ -22,9 +22,9 @@ class SymNN(BaseEstimator, RegressorMixin):
         print(len(y))
         print(X, y)
         X, y = check_X_y(X, y)
+        x_cols = X.columns.to_list()
         X = np.array(X).transpose()
         x_dim = X.shape[0]
-        x_cols = X.columns.to_list()
         model, train_history, blk_count = train_model_growth(
             X, y, self.start_ln_block, self.num_epochs, self.growth_steps, freeze=self.freeze,
             l1_reg=self.l1_reg, l2_reg=self.l2_reg)
