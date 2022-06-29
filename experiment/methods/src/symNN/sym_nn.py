@@ -32,7 +32,7 @@ class SymNN(BaseEstimator, RegressorMixin):
         self.blk_count = blk_count
 
         recovered_eq = get_sympy_expr_v2(model, x_dim, blk_count, round_digits=2)
-        self.recover_eq = recovered_eq
+        self.recovered_eq = recovered_eq
         return self
 
     def predict(self, X):
