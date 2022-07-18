@@ -245,7 +245,8 @@ if __name__ == '__main__':
 #SBATCH -A {A} -p {QUEUE} 
 #SBATCH --ntasks-per-node=1 --time={TIME}:00 
 #SBATCH --mem-per-cpu={M} 
-
+#SBATCH --gres=gpu:1
+#SBATCH --qos gpgpudeeplearn
 conda info 
 source plg_modules.sh
 

@@ -1,3 +1,5 @@
+print('beginning')
+
 import sys
 import itertools
 import pandas as pd
@@ -28,7 +30,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                    pre_train=None, skip_tuning=False, sym_data=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
-
+    
     np.random.seed(random_state)
     if hasattr(est, 'random_state'):
         est.random_state = random_state
@@ -37,6 +39,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # setup data
     ##################################################
     features, labels, feature_names = read_file(dataset)
+    print('features', features)
+    print('feature_names', feature_names)
     if sym_data:
         true_model = get_sym_model(dataset)
     # generate train/test split
@@ -44,7 +48,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     train_size=0.75,
                                                     test_size=0.25,
                                                     random_state=random_state)
-
+    print('Xtrain', X_train)
     # if dataset is large, subsample the training set 
     if n_samples > 0 and len(labels) > n_samples:
         print('subsampling training data from',len(X_train),'to',n_samples)
@@ -86,7 +90,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # run any method-specific pre_train routines
     if pre_train:
         pre_train(est, X_train_scaled, y_train_scaled)
-
     print('X_train:',X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
     
@@ -227,9 +230,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 ################################################################################
 import argparse
 import importlib
-
+print('starting eval')
 if __name__ == '__main__':
-
     # parse command line arguments
     parser = argparse.ArgumentParser(
         description="Evaluate a method on a dataset.", add_help=False)
@@ -259,6 +261,7 @@ if __name__ == '__main__':
                         default=False, help='Dont tune the estimator')
 
     args = parser.parse_args()
+    print('args parsed')
     # import algorithm 
     print('import from','methods.'+args.ALG)
     algorithm = importlib.__import__('methods.'+args.ALG,
@@ -285,7 +288,7 @@ if __name__ == '__main__':
         eval_kwargs['sym_data'] = True
     if args.SKIP_TUNE:
         eval_kwargs['skip_tuning'] = True
-
+    
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
                    algorithm.model, test = args.TEST, 

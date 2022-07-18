@@ -9,7 +9,8 @@ import numpy as np
 class SymNN(BaseEstimator, RegressorMixin):
 
     def __init__(self, reg_change=0.3, start_ln_block=1, growth_steps=2,
-                 l1_reg=0.1, l2_reg=0.01, num_epochs=200, freeze=False):
+                 l1_reg=0.1, l2_reg=0.01, num_epochs=200, freeze=False,
+                 round_digits=3):
         self.reg_change = reg_change
         self.start_ln_block = start_ln_block
         self.growth_steps = growth_steps
@@ -17,12 +18,14 @@ class SymNN(BaseEstimator, RegressorMixin):
         self.l2_reg = l2_reg
         self.freeze = freeze
         self.num_epochs = num_epochs
+        self.round_digits = round_digits
 
     def fit(self, X, y):
         print(len(y))
-        print(X, y)
+        #print('XY', X, y)
         X, y = check_X_y(X, y)
-        x_cols = X.columns.to_list()
+        #x_cols = X.columns.to_list()
+        x_cols = None
         X = np.array(X).transpose()
         x_dim = X.shape[0]
         model, train_history, blk_count = train_model_growth(
@@ -32,7 +35,8 @@ class SymNN(BaseEstimator, RegressorMixin):
         self.train_history = train_history
         self.blk_count = blk_count
 
-        recovered_eq = get_sympy_expr_v2(model, x_dim, blk_count, round_digits=2, x_cols=x_cols)
+        recovered_eq = get_sympy_expr_v2(model, x_dim, blk_count, round_digits=self.round_digits,
+             x_cols=x_cols)
         self.recovered_eq = recovered_eq
         return self
 

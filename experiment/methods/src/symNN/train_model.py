@@ -30,11 +30,12 @@ def reg_stages_train(model, train_x, train_y, num_epochs, reg_change=0.3, l1_reg
     set_model_l1_l2(model, l1=0, l2=0)
     hist1 = model.fit(train_x, train_y, validation_data=(val_x, val_y),
                       epochs=stage1_epochs, batch_size=32)
+    print('intermediate weights', model.get_weights())
     set_model_l1_l2(model, l1=l1_reg, l2=l2_reg)
     hist2 = model.fit(train_x, train_y, validation_data=(val_x, val_y),
                       epochs=stage2_epochs, batch_size=32)
     pred_y = model.predict(val_x)
-    print(val_y, pred_y)
+    #print(val_y, pred_y)
     mse = mean_squared_error(val_y[0], pred_y)
     return model, [hist1, hist2], mse
 
@@ -58,12 +59,12 @@ def train_model_reg_stage(train_x, train_y, ln_block_count, num_epochs, decay_st
 def train_model_growth(train_x, train_y, start_ln_block, num_epochs, growth_steps=2, decay_steps=1000, freeze=False,
                        reg_change=0.3, l1_reg=1e-2, l2_reg=1e-2):
     # train_x = [np.array(x) for x in np.array(train_x.transpose())]
-    print(train_x)
+    #print(train_x)
     x_dim = len(train_x)
     cur_ln_blocks = start_ln_block
     model = eql_model_v2(x_dim, ln_block_count=start_ln_block, decay_steps=decay_steps)
     train_history = []
-
+    print('model weights', model.get_weights())
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         0.01,
         decay_steps=decay_steps,
@@ -74,7 +75,7 @@ def train_model_growth(train_x, train_y, start_ln_block, num_epochs, growth_step
     # train_history.append(
     #     model.fit(train_x, train_y, epochs=num_epochs, batch_size=32, validation_split=0.2)
     # )
-
+    print(model.get_weights())
     model, history, mse = reg_stages_train(model, train_x, train_y, num_epochs, reg_change=reg_change,
                                       l1_reg=l1_reg, l2_reg=l2_reg)
     mse_cur = mse
@@ -105,7 +106,7 @@ def train_model_growth(train_x, train_y, start_ln_block, num_epochs, growth_step
         actual_blocks += 1
         mse_cur = mse
         train_history += history
-
+    print(model.get_weights())
     return model, train_history, actual_blocks
 
 

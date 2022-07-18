@@ -154,6 +154,7 @@ def clean_pred_model(model_str, dataset, est_name):
    
     local_dict = {k:Symbol(k) for k in features}
     new_model_str = model_str
+    print('new model str', new_model_str)
     # rename features
     for i,f in enumerate(features): 
         print('replacing feature',i,'with',f)
@@ -165,6 +166,7 @@ def clean_pred_model(model_str, dataset, est_name):
         new_model_str = new_model_str.replace('X'+str(i),f)
         new_model_str = new_model_str.replace('x[:,{}]'.format(i),f)
         new_model_str = new_model_str.replace('x[{}]'.format(i),f)
+    print('new model str mod', new_model_str)
     # operators
     new_model_str = new_model_str.replace('^','**')
     #GP-GOMEA

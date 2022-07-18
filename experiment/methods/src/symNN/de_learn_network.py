@@ -140,7 +140,6 @@ def eql_ln_block(inputs_x, layer_num):
     ln_dense = layers.Dense(1,
                             kernel_regularizer=L1L2_m(l1=1e-3, l2=1e-3),
                             use_bias=False, activation=activations.exponential,
-                            kernel_initializer=initializers.Identity(gain=1.0),
                             name='ln_dense_{}'.format(layer_num))(ln_concat)
     return ln_dense
 
@@ -174,7 +173,7 @@ def eql_model_v2(input_size, ln_block_count=2, decay_steps=1000, linear_block=Fa
             staircase=True)
         opt = optimizers.Adam(learning_rate=lr_schedule)
         model.compile(optimizer=opt, loss='mean_squared_error', metrics=['mean_squared_error'])
-
+        print('get weights 2', model.get_weights())
     return model
 
 
@@ -198,6 +197,7 @@ def add_ln_block(input_size, trained_model, cur_ln_block_count, decay_steps=1000
 
 
 def eql_model_signed(input_size):
+
     inputs_x = [layers.Input(shape=(1,)) for i in range(input_size)]
 
     abs_layers = [layers.Dense(1, use_bias=False,
