@@ -1,4 +1,4 @@
-from sympy import symbols, powsimp, ln, preorder_traversal, Float, sqrt
+from sympy import symbols, powsimp, ln, preorder_traversal, Float, sqrt, count_ops
 
 
 def get_sympy_expr(model_weights, x_dim):
@@ -24,6 +24,19 @@ def round_sympy_expr(sym_expr, round_digits=2, norm_thresh=0.01):
     return sym_expr
 
 
+def is_sqrt_term(expr):
+    if count_ops(expr) != 1 or len(expr.free_symbols) != 1:
+        return None
+    ops = list(count_ops(expr, visual=True).free_symbols)
+    op = ops[0].name
+    op_sym = list(expr.free_symbols)[0]
+    if op == 'POW' and op_sym**0.5 == expr:
+        return sqrt(op_sym)
+    elif op == 'POW' and op_sym**(-0.5) == expr:
+        return 1/sqrt(op_sym)
+    else:
+        return None
+
 def get_sympy_expr_v2(model, x_dim, ln_layer_count=2, round_digits=3,
                       norm_thresh=0.01, x_cols=None):
     if x_cols:
@@ -45,5 +58,7 @@ def get_sympy_expr_v2(model, x_dim, ln_layer_count=2, round_digits=3,
         sym_expr += ln_block_expr
     sym_expr = round_sympy_expr(sym_expr, round_digits=round_digits,
                                 norm_thresh=norm_thresh)
+
     print(sym_expr)
+    
     return sym_expr
