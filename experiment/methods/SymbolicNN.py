@@ -1,23 +1,23 @@
-from .src.symNN.sym_nn import SymNN
+from symnn.sym_nn import SymNN
 from sympy import preorder_traversal
 
-hyper_params = {'reg_change':0.3,
-                'start_ln_block':1,
+hyper_params = {'reg_change':0.5,
+                'start_ln_blocks':1,
                 'growth_steps':3,
-                'l1_reg':0,
-                'l2_reg':0,
+                'l1_reg':1e-4,
+                'l2_reg':1e-4,
                 'num_epochs':500,
-                'freeze':False,
-                'round_digits':3}
+                'round_digits':3,
+                'train_iter':4}
 
-est = SymNN(reg_change=0.3,
-            start_ln_block=1,
+est = SymNN(reg_change=0.5,
+            start_ln_blocks=1,
             growth_steps=3,
-            l1_reg=0,
-            l2_reg=0,
+            l1_reg=1e-4,
+            l2_reg=1e-4,
             num_epochs=500,
-            freeze=False,
-            round_digits=3)
+            round_digits=3,
+            train_iter=4)
 
 def eq_complexity(expr):
     c = 0
