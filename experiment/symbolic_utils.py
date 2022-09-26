@@ -152,20 +152,29 @@ def clean_pred_model(model_str, dataset, est_name):
 
     X, labels, features = read_file(dataset)
    
-    local_dict = {k:Symbol(k) for k in features}
+    local_dict = {k:Symbol(k, positive=True) for k in features}
     new_model_str = model_str
     print('new model str', new_model_str)
-    # rename features
+    
+    # rename features to common format
+    for i in range(len(features)):
+        if any([n in est_name.lower() for n in ['mrgp','operon','dsr']]):
+            i = i + 1
+        rep_f = 'X_' + str(i)
+        new_model_str = new_model_str.replace('x'+str(i),rep_f)
+        new_model_str = new_model_str.replace('x_'+str(i),rep_f)
+        new_model_str = new_model_str.replace('X_'+str(i),rep_f)
+        new_model_str = new_model_str.replace('X'+str(i),rep_f)
+        new_model_str = new_model_str.replace('x[:,{}]'.format(i),rep_f)
+        new_model_str = new_model_str.replace('x[{}]'.format(i),rep_f)
+    
+    #rename features
     for i,f in enumerate(features): 
         print('replacing feature',i,'with',f)
         if any([n in est_name.lower() for n in ['mrgp','operon','dsr']]):
             i = i + 1
-        new_model_str = new_model_str.replace('x'+str(i),f)
-        new_model_str = new_model_str.replace('x_'+str(i),f)
         new_model_str = new_model_str.replace('X_'+str(i),f)
-        new_model_str = new_model_str.replace('X'+str(i),f)
-        new_model_str = new_model_str.replace('x[:,{}]'.format(i),f)
-        new_model_str = new_model_str.replace('x[{}]'.format(i),f)
+    
     print('new model str mod', new_model_str)
     # operators
     new_model_str = new_model_str.replace('^','**')
@@ -244,7 +253,7 @@ def get_sym_model(dataset, return_str=True):
     # handle feynman problem constants
 #     print('model:',model_str)
     model_sym = parse_expr(model_str, 
-			   local_dict = {k:Symbol(k) for k in features})
+			   local_dict = {k:Symbol(k, positive=True) for k in features})
     model_sym = round_floats(model_sym)
 #     print('sym model:',model_sym)
     return model_sym
